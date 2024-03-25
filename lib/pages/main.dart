@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/pages/history.dart';
 import 'package:mobile_app/pages/home.dart';
 import 'package:mobile_app/pages/setting.dart';
@@ -11,7 +12,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
-    const HomePage(),
+    const ConnectPage(),
     const HistoryPage(),
     const SettingPage(),
   ];
@@ -19,6 +20,8 @@ class _MainPageState extends State<MainPage> {
   var _pageIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final cActiveButton = const Color.fromRGBO(47, 63, 137, 1);
+    final cUnactiveButton = const Color.fromRGBO(209, 223, 248, 1);
     return Scaffold(
       body: _pages[_pageIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -32,20 +35,27 @@ class _MainPageState extends State<MainPage> {
             _pageIndex = index;
           });
         },
-        selectedItemColor: const Color.fromRGBO(47, 63, 137, 1),
-        unselectedItemColor: const Color.fromRGBO(209, 223, 248, 1),
-        items: const [
+        items: [
           BottomNavigationBarItem(
             label: 'Home',
-            icon: Icon(Icons.home),
+            icon: SvgPicture.asset(
+              'assets/images/home_icon.svg',
+              color: _pageIndex == 0 ? cActiveButton : cUnactiveButton,
+            ),
           ),
           BottomNavigationBarItem(
             label: 'History',
-            icon: Icon(Icons.bar_chart),
+            icon: SvgPicture.asset(
+              'assets/images/chart_icon.svg',
+              color: _pageIndex == 1 ? cActiveButton : cUnactiveButton,
+            ),
           ),
           BottomNavigationBarItem(
             label: 'Setting',
-            icon: Icon(Icons.settings),
+            icon: SvgPicture.asset(
+              'assets/images/setting_icon.svg',
+              color: _pageIndex == 2 ? cActiveButton : cUnactiveButton,
+            ),
           )
         ],
       ),

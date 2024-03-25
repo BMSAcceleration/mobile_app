@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/pages/select_device.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ConnectPage extends StatefulWidget {
+  const ConnectPage({super.key});
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ConnectPage> createState() => _ConnectPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ConnectPageState extends State<ConnectPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -28,6 +29,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Text(
             'The battery is not detected.\nPlease turn on your bluetooth.',
+            textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
               fontSize: 16,
             ),
@@ -54,12 +56,19 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SelectDevicePage(),
+                  ),
+                );
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Connect\nto Battery',
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.plusJakartaSans(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
