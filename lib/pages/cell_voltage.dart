@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CellVoltage extends StatefulWidget{
+  const CellVoltage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState

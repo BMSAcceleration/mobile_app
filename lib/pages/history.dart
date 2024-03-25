@@ -9,7 +9,7 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('test'),
     );
   }

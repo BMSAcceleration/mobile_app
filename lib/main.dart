@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/pages/logo.dart';
 import 'package:mobile_app/pages/main.dart';
 
 void main() {
