@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mobile_app/pages/history.dart';
-import 'package:mobile_app/pages/home.dart';
+import 'package:mobile_app/pages/dashboard.dart';
+import 'package:mobile_app/pages/total_voltage.dart';
+import 'package:mobile_app/pages/connect.dart';
 import 'package:mobile_app/pages/setting.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,8 +13,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
-    const ConnectPage(),
-    const HistoryPage(),
+    // const ConnectPage(),
+    const DashboardPage(),
+    const TotalVoltage(),
     const SettingPage(),
   ];
 

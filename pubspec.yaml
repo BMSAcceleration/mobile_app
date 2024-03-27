@@ -37,6 +37,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
+  flutter_osm_plugin: ^0.60.5
+  syncfusion_flutter_gauges: ^25.1.37
+  syncfusion_flutter_charts: ^25.1.37
 
 dev_dependencies:
   flutter_test:
@@ -66,9 +69,6 @@ flutter:
     - assets/images/home_icon.svg
     - assets/images/setting_icon.svg
     - assets/images/back_icon.svg
-    - assets/images/chart_icon.png
-    - assets/images/home_icon.png
-    - assets/images/setting_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
