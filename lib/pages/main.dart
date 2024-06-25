@@ -1,26 +1,32 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/pages/dashboard.dart';
 import 'package:mobile_app/pages/total_voltage.dart';
-import 'package:mobile_app/pages/connect.dart';
 import 'package:mobile_app/pages/setting.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final BluetoothDevice device;
+
+  const MainPage({Key? key, required this.device}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<Widget> _pages = [
-    // const ConnectPage(),
-    const DashboardPage(),
-    const TotalVoltage(),
-    const SettingPage(),
-  ];
+  late List<Widget> _pages;
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      // const ConnectPage(),
+      DashboardPage(
+        device: widget.device,
+      ),
+      const TotalVoltage(),
+      const SettingPage(),
+    ];
+  }
 
   var _pageIndex = 0;
 

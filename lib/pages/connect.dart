@@ -28,7 +28,7 @@ class _ConnectPageState extends State<ConnectPage> {
             height: 24,
           ),
           Text(
-            'The battery is not detected.\nPlease turn on your bluetooth.',
+            'Bluetooth Adapter is off.\nPlease turn on your bluetooth.',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
               fontSize: 16,

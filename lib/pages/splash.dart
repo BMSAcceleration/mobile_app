@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile_app/pages/main.dart';
 import 'package:mobile_app/pages/bluetooth_state_observer.dart';
 
 class SplashPage extends StatefulWidget {

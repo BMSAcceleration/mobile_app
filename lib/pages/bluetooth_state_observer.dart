@@ -41,6 +41,7 @@ class _BMSAppState extends State<BMSApp> {
         : BluetoothOffScreen(adapterState: _adapterState);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       color: Colors.lightBlue,
       home: screen,
       navigatorObservers: [BluetoothAdapterStateObserver()],
@@ -54,7 +55,7 @@ class BluetoothAdapterStateObserver extends NavigatorObserver {
   @override
   void didPush(Route route, Route? previousRoute) {
     super.didPush(route, previousRoute);
-    if (route.settings.name == '/DeviceScreen') {
+    if (route.settings.name == '/MainPage') {
       // Start listening to Bluetooth state changes when a new route is pushed
       _adapterStateSubscription ??=
           FlutterBluePlus.adapterState.listen((state) {

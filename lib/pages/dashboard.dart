@@ -1,38 +1,216 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/ble_comm_protocol/dart/lib/bms_ble_protocol.dart';
+import 'package:mobile_app/utils/extra.dart';
 import 'package:mobile_app/widgets/connection_status.dart';
-import 'package:mobile_app/widgets/mini_map.dart';
+
+const String bmsServiceUuid = "91bad492-b950-4226-aa2b-4ede9fa42f59";
+const String dataCharacUuid = "cba1d466-344c-4be3-ab3f-189f80dd7518";
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+  final BluetoothDevice device;
+
+  const DashboardPage({Key? key, required this.device}) : super(key: key);
   @override
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
+  int? _rssi;
+  int? _mtuSize;
+  BluetoothConnectionState _connectionState =
+      BluetoothConnectionState.disconnected;
+  List<BluetoothService> _services = [];
+  bool _isDiscoveringServices = false;
+  bool _isConnecting = false;
+  bool _isDisconnecting = false;
 
-  late StreamSubscription<BluetoothAdapterState> _adapterStateStateSubscription;
+  late StreamSubscription<BluetoothConnectionState>
+      _connectionStateSubscription;
+  late StreamSubscription<bool> _isConnectingSubscription;
+  late StreamSubscription<bool> _isDisconnectingSubscription;
+  late StreamSubscription<int> _mtuSubscription;
+
+  StreamSubscription? _dataCharacLastValueStream;
+  StreamSubscription? _dataCharacValueReceivedStream;
+  StreamSubscription? _dataDescLastValueStream;
+  StreamSubscription? _dataDescValueReceivedStream;
+
+  // BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
+
+  // late StreamSubscription<BluetoothAdapterState> _adapterStateStateSubscription;
 
   @override
   void initState() {
     super.initState();
-    _adapterStateStateSubscription =
-        FlutterBluePlus.adapterState.listen((state) {
-      _adapterState = state;
+    // _adapterStateStateSubscription =
+    //     FlutterBluePlus.adapterState.listen((state) {
+    //   _adapterState = state;
+    //   if (mounted) {
+    //     setState(() {});
+    //   }
+    // });
+    _connectionStateSubscription =
+        widget.device.connectionState.listen((state) async {
+      _connectionState = state;
+      if (state == BluetoothConnectionState.connected) {
+        _services = []; // must rediscover services
+      }
+      if (state == BluetoothConnectionState.connected && _rssi == null) {
+        _rssi = await widget.device.readRssi();
+      }
       if (mounted) {
         setState(() {});
       }
     });
+
+    _isConnectingSubscription = widget.device.isConnecting.listen((value) {
+      _isConnecting = value;
+      if (mounted) {
+        setState(() {});
+      }
+    });
+
+    _isDisconnectingSubscription =
+        widget.device.isDisconnecting.listen((value) {
+      _isDisconnecting = value;
+      if (mounted) {
+        setState(() {});
+      }
+    });
+
+    discoverServices();
   }
 
   @override
   void dispose() {
-    _adapterStateStateSubscription.cancel();
+    print('### dispose start');
+    print('### $_dataCharacLastValueStream');
+    if (_dataCharacLastValueStream != null) {
+      print("### cancel");
+      _dataCharacLastValueStream!.cancel();
+    }
+    if (_dataCharacValueReceivedStream != null) {
+      _dataCharacValueReceivedStream!.cancel();
+    }
+    if (_dataDescLastValueStream != null) {
+      _dataDescLastValueStream!.cancel();
+    }
+    if (_dataDescValueReceivedStream != null) {
+      _dataDescValueReceivedStream!.cancel();
+    }
+
+    _connectionStateSubscription.cancel();
+    _mtuSubscription.cancel();
+    _isConnectingSubscription.cancel();
+    _isDisconnectingSubscription.cancel();
+
     super.dispose();
+  }
+
+  bool get isConnected {
+    return _connectionState == BluetoothConnectionState.connected;
+  }
+
+  Future discoverServices() async {
+    // if (mounted) {
+    //   setState(() {
+    //     _isDiscoveringServices = true;
+    //   });
+    // }
+    print("### Dscover");
+    try {
+      print("### connect");
+      await widget.device.connectAndUpdateStream();
+      print("### discvoner");
+      _services = await widget.device.discoverServices();
+      print("### dscv done");
+      await findServices();
+      print("### services find done");
+      return true;
+      // Snackbar.show(ABC.c, "Discover Services: Success", success: true);
+    } catch (e) {
+      print("### discover error");
+      return false;
+      // Snackbar.show(ABC.c, prettyException("Discover Services Error:", e),
+      // success: false);
+    }
+    // if (mounted) {
+    //   setState(() {
+    //     _isDiscoveringServices = false;
+    //   });
+    // }
+  }
+
+  Future findServices() async {
+    print("### service start $_services");
+
+    _services.forEach((service) {
+      print("### service ${service.uuid}");
+      service.characteristics.forEach((charac) async {
+        ///subscirbe
+        if (charac.uuid.str != dataCharacUuid) {
+          return;
+        }
+
+        print("### found match characetersit");
+
+        await charac.setNotifyValue(true);
+
+        print("### map stream");
+        _dataCharacLastValueStream = charac.lastValueStream.listen((data) {
+          print("### data ${data}");
+        });
+        _dataCharacValueReceivedStream =
+            charac.onValueReceived.listen((value) async {
+          final reads = await charac.read();
+          print('### value notify $value');
+
+          // print('### value reads $reads');
+
+          DeviceInfo deviceInfo = getDeviceInfo(value);
+          print('### device info $deviceInfo');
+
+          ///iki digawe fubgsi dhewek
+          // print("### value ${value}");
+          // await charac.write("value".codeUnits);
+        });
+
+        charac.descriptors.forEach((desc) async {
+          print("### sub desc $desc");
+          _dataDescLastValueStream = desc.lastValueStream.listen((data) {
+            print("### desc data $data");
+          });
+          _dataDescValueReceivedStream = desc.onValueReceived.listen((data) {
+            print("### desc val rec $data");
+          });
+        });
+      });
+    });
+  }
+
+  getDeviceInfo(List<int> value) {
+    BleMessageBuffer messageBuffer =
+        BleMessageBuffer.fromUint8List(Uint8List.fromList(value));
+    int offset = 0;
+    final read = messageBuffer.readMessageHeader(0);
+
+    MessageHeader? messageHeader = read.message;
+    offset += read.bytesRead;
+
+    print('### header $messageHeader');
+
+    final readDeviceInfo = messageBuffer.readDeviceInfo(offset);
+
+    DeviceInfo? deviceInfo = readDeviceInfo.message;
+    offset += read.bytesRead;
+
+    print('### $deviceInfo');
+    return deviceInfo;
   }
 
   @override

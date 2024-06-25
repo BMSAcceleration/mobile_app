@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:mobile_app/pages/dashboard.dart';
+import 'package:mobile_app/pages/main.dart';
 
 import 'device_screen.dart';
 import '../utils/snackbar.dart';
@@ -84,8 +86,8 @@ class _ScanBluetoothPageState extends State<ScanBluetoothPage> {
           success: false);
     });
     MaterialPageRoute route = MaterialPageRoute(
-        builder: (context) => DeviceScreen(device: device),
-        settings: const RouteSettings(name: '/DeviceScreen'));
+        builder: (context) => MainPage(device: device),
+        settings: const RouteSettings(name: '/MainPage'));
     Navigator.of(context).push(route);
   }
 
@@ -121,8 +123,8 @@ class _ScanBluetoothPageState extends State<ScanBluetoothPage> {
             device: d,
             onOpen: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => DeviceScreen(device: d),
-                settings: const RouteSettings(name: '/DeviceScreen'),
+                builder: (context) => MainPage(device: d),
+                settings: const RouteSettings(name: '/MainPage'),
               ),
             ),
             onConnect: () => onConnectPressed(d),
