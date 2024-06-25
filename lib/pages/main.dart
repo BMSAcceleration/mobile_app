@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/pages/dashboard.dart';
 import 'package:mobile_app/pages/total_voltage.dart';
@@ -20,11 +23,13 @@ class _MainPageState extends State<MainPage> {
   ];
 
   var _pageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    final cActiveButton = const Color.fromRGBO(47, 63, 137, 1);
-    final cUnactiveButton = const Color.fromRGBO(209, 223, 248, 1);
+    const cActiveButton = Color.fromRGBO(47, 63, 137, 1);
+    const cUnactiveButton = Color.fromRGBO(209, 223, 248, 1);
     return Scaffold(
+      // body: _pages[_pageIndex],
       body: _pages[_pageIndex],
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,

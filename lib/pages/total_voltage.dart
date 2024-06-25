@@ -41,8 +41,8 @@ class _TotalVoltageState extends State<TotalVoltage> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(24, 24, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [],

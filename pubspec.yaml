@@ -40,6 +40,7 @@ dependencies:
   flutter_osm_plugin: ^0.60.5
   syncfusion_flutter_gauges: ^25.1.37
   syncfusion_flutter_charts: ^25.1.37
+  flutter_blue_plus: ^1.31.18
 
 dev_dependencies:
   flutter_test:

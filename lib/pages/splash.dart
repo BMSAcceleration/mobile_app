@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/pages/main.dart';
+import 'package:mobile_app/pages/bluetooth_state_observer.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -18,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
     Timer(const Duration(milliseconds: 2000), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const MainPage(),
+          builder: (context) => const BMSApp(),
         ),
       );
     });

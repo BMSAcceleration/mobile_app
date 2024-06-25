@@ -8,12 +8,12 @@ class MiniMap extends StatefulWidget {
 }
 
 class _MiniMapState extends State<MiniMap> {
-  final List<GeoPoint> _latLonData = [
-    GeoPoint(
-      latitude: -7.7828,
-      longitude: 110.3608,
-    )
-  ];
+  // final List<GeoPoint> _latLonData = [
+  //   GeoPoint(
+  //     latitude: -7.7828,
+  //     longitude: 110.3608,
+  //   )
+  // ];
   late MapController controller;
 
   @override
